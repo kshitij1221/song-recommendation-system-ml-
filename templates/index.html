@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Music Player{% endblock %}
+
+{% block content %}
+    <h1>Music Player</h1>
+
+    {% if song %}
+        <h2>Now Playing: {{ song['title'] }} by {{ song['artist'] }}</h2>
+        <audio controls autoplay>
+            <source src="{{ url_for('uploaded_file', filename=song['file_path'].split('/')[-1]) }}" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    {% endif %}
+
+    <div class="player">
+        <form action="{{ url_for('search_results') }}" method="get">
+            <input type="text" id="searchBox" name="query" placeholder="Search for a song" required>
+            <button type="submit">Search</button>
+            <ul id="suggestions" class="suggestions-list"></ul>
+        </form>
+        <button id="toggleSongList">Show Song List</button>
+
+        <div id="songList" style="display: none;">
+            <h2>Song List</h2>
+            <ul>
+                {% for song in songs %}
+                    <li><a href="{{ url_for('play_song', song_id=song['_id']) }}">{{ song['title'] }} by {{ song['artist'] }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2>Last 5 Played Songs</h2>
+        <ul>
+            {% for song in last_five_played %}
+                <li><a href="{{ url_for('play_song', song_id=song['song_details']['_id']) }}">
+                    {{ song['song_details']['title'] }} by {{ song['song_details']['artist'] }}
+                </a></li>
+            {% endfor %}
+        </ul>
+        
+        <!-- Recommendation Form -->
+        <h2>Get Song Recommendations</h2>
+        <form id="recommendationForm">
+            <label for="recommend_song_name">Enter Song Name:</label>
+            <input type="text" id="recommend_song_name" name="song_name" required>
+            <button type="submit">Get Recommendations</button>
+        </form>
+
+        <!-- Recommendations Section -->
+        <h2>Recommended Songs</h2>
+        <ul id="recommendations">
+            <!-- Recommendations will be dynamically inserted here -->
+        </ul>
+
+    </div>
+
+    <a href="{{ url_for('upload_song') }}">
+        <button>Upload a Song</button>
+    </a>
+
+{% endblock %}
+
+

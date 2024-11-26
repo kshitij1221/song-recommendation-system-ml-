@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Song{% endblock %}
+
+{% block content %}
+<h2>Upload Song</h2>
+<form action="{{ url_for('upload_song') }}" method="post" enctype="multipart/form-data">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+    
+    <label for="artist">Artist:</label>
+    <input type="text" id="artist" name="artist" required><br><br>
+    
+    <label for="album">Album:</label>
+    <input type="text" id="album" name="album"><br><br>
+    
+    <label for="file">Choose a file:</label>
+    <input type="file" id="file" name="file" accept=".mp3,.wav,.flac" required><br><br>
+    
+    <button type="submit">Upload Song</button>
+</form>
+
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+{% endblock %}
